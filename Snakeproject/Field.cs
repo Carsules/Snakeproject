@@ -45,5 +45,13 @@ namespace Snakeproject
             }
 
         }
+        void createsnake()
+        {
+            for(int i = 10; i < 4; i++)
+            {
+                zone[i, 10] = (byte)stateofsquare.snake;
+            }
+
+        }
     }
 }
