@@ -8,6 +8,7 @@ namespace Snakeproject
 {
     class Field
     {
+        
         byte[,] zone = new byte[25, 25];
 
         enum stateofsquare
@@ -33,11 +34,13 @@ namespace Snakeproject
             bool same = true;
             while (same)
             {
-                Random x = new Random();
-                Random y = new Random();
-                if (zone[x.Next(25), y.Next(25)] != (byte)stateofsquare.snake)
+                Random rnd = new Random();
+                byte x = (byte)rnd.Next(25);
+                byte y = (byte)rnd.Next(25);
+                if ((zone[x, y] != (byte)stateofsquare.snake) & (zone[x, y] != (byte)stateofsquare.edge))
                 {
                     same = false;
+                    zone[x, y] = (byte)stateofsquare.food;
                 }
             }
 
