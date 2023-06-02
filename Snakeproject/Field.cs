@@ -6,52 +6,19 @@ using System.Threading.Tasks;
 
 namespace Snakeproject
 {
-    class Field
+    public class Field
     {
-        
-        byte[,] zone = new byte[25, 25];
-
-        enum stateofsquare
+        public int Row { get;}
+        public int Col { get;}
+        public Field(int row, int col)
         {
-            empty=0,
-            snake=1,
-            food=2,
-            edge=3
-        };
-
-        void Edgezone()
-        {
-            for(byte i = 0; i < 25; i++)
-            {
-                zone[i,0]=(byte)stateofsquare.edge;
-                zone[i, 24] = (byte)stateofsquare.edge;
-                zone[0, i] = (byte)stateofsquare.edge;
-                zone[24, i] = (byte)stateofsquare.edge;
-            }
+            Row = row;
+            Col = col;
         }
-        void shootfood()
+        public Field Trans(Hero snk)
         {
-            bool same = true;
-            while (same)
-            {
-                Random rnd = new Random();
-                byte x = (byte)rnd.Next(25);
-                byte y = (byte)rnd.Next(25);
-                if ((zone[x, y] != (byte)stateofsquare.snake) & (zone[x, y] != (byte)stateofsquare.edge))
-                {
-                    same = false;
-                    zone[x, y] = (byte)stateofsquare.food;
-                }
-            }
-
+            return new Field(Row + snk.RowOffset, Col + snk.ColOffset);
         }
-        void createsnake()
-        {
-            for(int i = 10; i < 4; i++)
-            {
-                zone[i, 10] = (byte)stateofsquare.snake;
-            }
 
-        }
     }
 }

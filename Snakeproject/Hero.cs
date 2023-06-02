@@ -6,39 +6,22 @@ using System.Threading.Tasks;
 
 namespace Snakeproject
 {
-    class Hero
+    public class Hero
     {
-        byte headposcol;
-        byte headposrow;
-        byte tailposcol;
-        byte tailposrow;
-        
-        void sethead(byte headcol, byte headrow)
+        public static Hero left = new Hero(0, -1);
+        public static Hero right = new Hero(0, -1);
+        public static Hero up = new Hero(-1, 0);
+        public static Hero down = new Hero(1, 0);
+        public int RowOffset { get; }
+        public int ColOffset { get; }
+        Hero(int rowOffset, int colOffset)
         {
-            headposcol=headcol;
-            headposrow=headrow;
+            RowOffset = rowOffset;
+            ColOffset = colOffset;
         }
-        void settail(byte tailcol, byte tailrow)
+        public Hero Opposite()
         {
-            tailposcol=tailcol;
-            tailposrow=tailrow;
+            return new Hero(-RowOffset, -ColOffset);
         }
-        void dirup()
-        {
-            headposcol--;
-        }
-        void dirdown()
-        {
-            headposcol++;
-        }
-        void dirright()
-        {
-            headposrow++;
-        }
-        void dirleft()
-        {
-            headposrow--;
-        }
-
     }
 }
