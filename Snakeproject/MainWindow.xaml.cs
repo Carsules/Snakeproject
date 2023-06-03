@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static Snakeproject.engine;
 
 namespace Snakeproject
 {
@@ -20,9 +21,91 @@ namespace Snakeproject
     /// </summary>
     public partial class MainWindow : Window
     {
+        public Dictionary<items, ImageSource> gridtoimg = new()
+        {
+            {items.empty, Graphics.empty },
+            {items.snake, Graphics.body },
+            {items.food, Graphics.food }
+
+        };
+        public engine state;
+        public int rows = 10, cols = 10;
+        public Image[,] gridimg;
         public MainWindow()
         {
             InitializeComponent();
+            gridimg = SetupGrid();
+            state = new engine(rows, cols);
+        }
+        public async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            Draw();
+            await Loop();
+        }
+        public void Window_KeyDown(Object sender, KeyEventArgs e)
+        {
+            if (state.Gameover)
+            {
+                return;
+            }
+            switch (e.Key)
+            {
+                case Key.Left:
+                    state.sidemove(Hero.left);
+                    break;
+                case Key.Right:
+                    state.sidemove(Hero.right);
+                    break;
+                case Key.Up:
+                    state.sidemove(Hero.up);
+                    break;
+                case Key.Down:
+                    state.sidemove(Hero.down);
+                    break;
+            }
+        }
+        public async Task Loop()
+        {
+            while (!state.Gameover)
+            {
+                await Task.Delay(10);
+                state.move();
+                Draw();
+            }
+        }
+        public Image[,] SetupGrid()
+        {
+            Image[,] images = new Image[rows, cols];
+            GameGrid.Rows = rows;
+            GameGrid.Columns = cols;
+            for(int r = 0; r < rows; r++)
+            {
+                for(int c = 0; c < cols; c++)
+                {
+                    Image image = new Image
+                    {
+                        Source = Graphics.empty
+                    };
+                    images[r, c] = image;
+                    GameGrid.Children.Add(image);
+                }
+            }
+            return images;
+        }
+        public void Draw()
+        {
+            drwgrd();
+        }
+        public void drwgrd()
+        {
+            for(int r =0; r < rows; r++)
+            {
+                for (int c=0; c < cols; c++)
+                {
+                    items gridval = state.Grid[r, c];
+                    gridimg[r, c].Source = gridtoimg[gridval];
+                }
+            }
         }
     }
 }

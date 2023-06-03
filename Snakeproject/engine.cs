@@ -7,7 +7,7 @@ using System.Windows.Media;
 
 namespace Snakeproject
 {
-    class engine
+    public class engine
     {
         public enum items
         {
