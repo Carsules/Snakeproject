@@ -37,6 +37,10 @@ namespace Snakeproject
             gridimg = SetupGrid();
             state = new engine(rows, cols);
         }
+        public void Restart()
+        {
+            state = new engine(rows, cols);
+        }
         public async Task RunGame()
         {
             Draw();
@@ -58,6 +62,10 @@ namespace Snakeproject
         }
         public void Window_KeyDown(Object sender, KeyEventArgs e)
         {
+            if(e.Key == Key.R)
+            {
+                Restart();
+            }
             if (state.Gameover)
             {
                 return;
