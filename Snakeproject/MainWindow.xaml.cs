@@ -28,8 +28,8 @@ namespace Snakeproject
 
         };
         public engine state;
-        public int rows = 10, cols = 10;
-        public Image[,] gridimg;
+        private readonly int rows = 25, cols = 25;
+        private readonly Image[,] gridimg;
         public bool gamerun;
         public MainWindow()
         {
@@ -80,14 +80,19 @@ namespace Snakeproject
         }
         private async Task Loop()
         {
+            int time = 100;
             while (!state.Gameover)
             {
-                await Task.Delay(100);
+                
+                if(state.Score < 29) {
+                    await Task.Delay(time - state.Score * 5);
+                }
+                else await Task.Delay(time);
                 state.move();
                 Draw();
             }
         }
-        public Image[,] SetupGrid()
+        private Image[,] SetupGrid()
         {
             Image[,] images = new Image[rows, cols];
             GameGrid.Rows = rows;
@@ -109,6 +114,7 @@ namespace Snakeproject
         public void Draw()
         {
             drwgrd();
+            ScoreT.Text = $"Очки {state.Score}";
         }
 
         public void drwgrd()

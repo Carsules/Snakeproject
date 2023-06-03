@@ -6,7 +6,7 @@ namespace Snakeproject
     public class Hero
     {
         public readonly static Hero left = new Hero(0, -1);
-        public readonly static Hero right = new Hero(0, -1);
+        public readonly static Hero right = new Hero(0, 1);
         public readonly static Hero up = new Hero(-1, 0);
         public readonly static Hero down = new Hero(1, 0);
         public int RowOffset { get; }
