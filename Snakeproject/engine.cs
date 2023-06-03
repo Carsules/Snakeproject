@@ -9,13 +9,6 @@ namespace Snakeproject
 {
     public class engine
     {
-        public enum items
-        {
-            empty=0,
-            snake=1,
-            food=2,
-            edge=3
-        }
        public int Rows { get; }
        public int Cols { get; }
        
@@ -25,8 +18,8 @@ namespace Snakeproject
         public bool Gameover { get; set; }
 
         public LinkedList<Hero> dirchng = new LinkedList<Hero>();
-        private LinkedList<Field> snkpos = new LinkedList<Field>();
-        private Random rnd = new Random();
+        private readonly LinkedList<Field> snkpos = new LinkedList<Field>();
+        private readonly Random rnd = new Random();
         public engine(int rows, int cols) {
             Rows = rows;
             Cols = cols;
@@ -80,12 +73,12 @@ namespace Snakeproject
         {
             return snkpos;
         }
-        public void addhead(Field pos)
+        private void addhead(Field pos)
         {
             snkpos.AddFirst(pos);
             Grid[pos.Row, pos.Col] = items.snake;
         }
-        public void remtail()
+        private void remtail()
         {
             Field tail = snkpos.Last.Value;
             Grid[tail.Row, tail.Col] = items.empty;

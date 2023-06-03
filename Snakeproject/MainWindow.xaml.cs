@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using static Snakeproject.engine;
 
 namespace Snakeproject
 {
@@ -79,7 +78,7 @@ namespace Snakeproject
                     break;
             }
         }
-        public async Task Loop()
+        private async Task Loop()
         {
             while (!state.Gameover)
             {
