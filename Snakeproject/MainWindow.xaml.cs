@@ -31,16 +31,31 @@ namespace Snakeproject
         public engine state;
         public int rows = 10, cols = 10;
         public Image[,] gridimg;
+        public bool gamerun;
         public MainWindow()
         {
             InitializeComponent();
             gridimg = SetupGrid();
             state = new engine(rows, cols);
         }
-        public async void Window_Loaded(object sender, RoutedEventArgs e)
+        public async Task RunGame()
         {
             Draw();
+            Overlay.Visibility = Visibility.Hidden;
             await Loop();
+        }
+        public async void Window_PreviewKeyDown(Object sender, KeyEventArgs e)
+        {
+            if (Overlay.Visibility == Visibility.Visible)
+            {
+                e.Handled = true;
+            }
+            if (!gamerun)
+            {
+                gamerun = true;
+                await RunGame();
+                gamerun = false;
+            }
         }
         public void Window_KeyDown(Object sender, KeyEventArgs e)
         {
@@ -68,7 +83,7 @@ namespace Snakeproject
         {
             while (!state.Gameover)
             {
-                await Task.Delay(10);
+                await Task.Delay(100);
                 state.move();
                 Draw();
             }
@@ -96,6 +111,7 @@ namespace Snakeproject
         {
             drwgrd();
         }
+
         public void drwgrd()
         {
             for(int r =0; r < rows; r++)

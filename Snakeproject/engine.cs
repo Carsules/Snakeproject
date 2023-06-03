@@ -24,6 +24,7 @@ namespace Snakeproject
         public int Score { get; set; }
         public bool Gameover { get; set; }
 
+        public LinkedList<Hero> dirchng = new LinkedList<Hero>();
         private LinkedList<Field> snkpos = new LinkedList<Field>();
         private Random rnd = new Random();
         public engine(int rows, int cols) {
@@ -37,7 +38,7 @@ namespace Snakeproject
         private void create()
         {
             int r = Rows / 2;
-            for(int i = 1; i < 4; i++)
+            for(int i = 2; i < 5; i++)
             {
                 Grid[r, i] = items.snake;
                 snkpos.AddFirst(new Field(r, i));
@@ -90,9 +91,32 @@ namespace Snakeproject
             Grid[tail.Row, tail.Col] = items.empty;
             snkpos.RemoveLast();
         }
+
+        public Hero getlastdir()
+        {
+            if (dirchng.Count == 0)
+            {
+                return snk;
+            }
+            return dirchng.Last.Value;
+        }
+
+        public bool CanChangeDirection(Hero newdir)
+        {
+            if(dirchng.Count == 2)
+            {
+                return false;
+            }
+
+            Hero lastdir = getlastdir();
+            return newdir != lastdir && newdir != lastdir.Opposite();
+        }
         public void sidemove(Hero dir)
         {
-            snk = dir;
+            if (CanChangeDirection(dir))
+            {
+                dirchng.AddLast(dir);
+            }
         }
         public bool edgerunner(Field pos)
         {
@@ -112,6 +136,11 @@ namespace Snakeproject
         }
         public void move()
         {
+            if(dirchng.Count > 0)
+            {
+                snk = dirchng.First.Value;
+                dirchng.RemoveFirst();
+            }
             Field headp = headpos().Trans(snk);
             items crash = Strike(headp);
             if(crash == items.edge || crash == items.snake)
