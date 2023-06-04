@@ -9,7 +9,14 @@ namespace Snakeproject
 {
     public class engine
     {
-       public int Rows { get; }
+        public enum items
+        {
+            empty = 0,
+            snake = 1,
+            food = 2,
+            edge = 3
+        }
+    public int Rows { get; }
        public int Cols { get; }
        
        public items[,] Grid { get; }

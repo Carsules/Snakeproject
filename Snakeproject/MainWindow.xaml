@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Snakeproject"
         mc:Ignorable="d"
-        Title="Snakehaze" Height="700" Width="800"
+        Title="Snakehaze" Height="700" Width="820"
         Background="{StaticResource backgroundColor}"
         Foreground="{StaticResource Textcolor}"
         FontFamily="{StaticResource MainFont}"
@@ -20,6 +20,12 @@
         </Grid.RowDefinitions>
 
         <TextBlock x:Name="ScoreT"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   Text="Счёт 0"
+                   FontSize="30"
+                   Margin="10"/>
+        <TextBlock x:Name="ScoreB"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    Text="Счёт 0"
@@ -29,10 +35,23 @@
                 Grid.Row="1"
                 BorderBrush="{StaticResource GridlineColor}"
                 BorderThickness="1.5"
-                HorizontalAlignment="Center"
+                HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 RenderOptions.EdgeMode="Aliased">
             <UniformGrid x:Name="GameGrid"
+                         Width="400"
+                         Height="400"
+                         Background="{StaticResource GridbackgroundColor}">
+            </UniformGrid>
+        </Border>
+        <Border x:Name="botBorder"
+                Grid.Row="1"
+                BorderBrush="{StaticResource GridlineColor}"
+                BorderThickness="1.5"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                RenderOptions.EdgeMode="Aliased">
+            <UniformGrid x:Name="botGrid"
                          Width="400"
                          Height="400"
                          Background="{StaticResource GridbackgroundColor}">
