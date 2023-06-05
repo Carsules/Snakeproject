@@ -5,13 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Snakeproject"
         mc:Ignorable="d"
-        Title="Snakehaze" Height="700" Width="820"
+        Title="Snakehaze" Height="700" Width="830"
         Background="{StaticResource backgroundColor}"
         Foreground="{StaticResource Textcolor}"
         FontFamily="{StaticResource MainFont}"
         WindowStartupLocation="CenterScreen"
         PreviewKeyDown="Window_PreviewKeyDown"
-        KeyDown="Window_KeyDown">
+        KeyDown="Window_KeyDown"
+        ResizeMode="NoResize"
+        >
     
     <Grid>
         <Grid.RowDefinitions>
@@ -26,7 +28,7 @@
                    FontSize="30"
                    Margin="10"/>
         <TextBlock x:Name="ScoreB"
-                   HorizontalAlignment="Center"
+                   HorizontalAlignment="Right"
                    VerticalAlignment="Center"
                    Text="Счёт 0"
                    FontSize="30"

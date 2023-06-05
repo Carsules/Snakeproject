@@ -11,14 +11,12 @@
     <None Remove="visual\body.png" />
     <None Remove="visual\empty.png" />
     <None Remove="visual\food.png" />
-    <None Remove="visual\head.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="visual\body.png" />
     <Resource Include="visual\empty.png" />
     <Resource Include="visual\food.png" />
-    <Resource Include="visual\head.png" />
   </ItemGroup>
 
 </Project>

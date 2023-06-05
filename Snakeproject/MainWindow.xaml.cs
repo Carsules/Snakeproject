@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -102,8 +103,8 @@ namespace Snakeproject
                     await Task.Delay(time - state.Score * 2 - bot.Score*2);
                 }
                 else await Task.Delay(5);
-                Botbtain();
                 state.move();
+                brain();
                 bot.move();
                 Draw();
             }
@@ -176,92 +177,142 @@ namespace Snakeproject
                 }
             }
         }
-        public void Botbtain()
+        public void brain()
         {
-            for (int r = 1; r < rows-1; r++)
-            {
-                for (int c = 1; c < cols-1; c++)
+
+                // получаем координаты еды на карте
+                int foodRow = -1;
+                int foodCol = -1;
+
+                for (int r = 0; r < rows; r++)
                 {
-                    if(items.food == bot.Grid[r, c])
+                    for (int c = 0; c < cols; c++)
                     {
-                        if(bot.headpos().Row < r)
+                        if (bot.Grid[r, c] == items.food)
                         {
-                            if (bot.Grid[bot.headpos().Row+1, bot.headpos().Col] ==items.snake)
-                            {
-                                for(int ch = 1; ch < cols - 1; ch++)
-                                {
-                                    if ((bot.Grid[bot.headpos().Row, ch] == items.snake))
-                                    {
-                                        if(ch < bot.headpos().Col)
-                                        {
-                                            bot.sidemove(Hero.down);
-                                        }
-                                        else bot.sidemove(Hero.up);
-
-                                    }
-                                }
-                            }
-                            else bot.sidemove(Hero.right);
-                        }
-                        else
-                        {
-                            if (bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake)
-                            {
-                                for (int ch = 1; ch < cols - 1; ch++)
-                                {
-                                    if ((bot.Grid[bot.headpos().Row, ch] == items.snake))
-                                    {
-                                        if (ch < bot.headpos().Col)
-                                        {
-                                            bot.sidemove(Hero.down);
-                                        }
-                                        else bot.sidemove(Hero.up);
-
-                                    }
-                                }
-                            }
-                            else bot.sidemove(Hero.left);
-                        }
-                        if (bot.headpos().Col < c)
-                        {
-                            if (bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake)
-                            {
-                                for (int ch = 1; ch < rows - 1; ch++)
-                                {
-                                    if ((bot.Grid[ch, bot.headpos().Col] == items.snake))
-                                    {
-                                        if (ch < bot.headpos().Row)
-                                        {
-                                            bot.sidemove(Hero.right);
-                                        }
-                                        else bot.sidemove(Hero.left);
-                                    }
-                                }
-                            }
-                            else bot.sidemove(Hero.down);
-                        }
-                        else
-                        {
-                            if (bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake)
-                            {
-                                for (int ch = 1; ch < cols - 1; ch++)
-                                {
-                                    if ((bot.Grid[ch, bot.headpos().Col] == items.snake))
-                                    {
-                                        if (ch < bot.headpos().Row)
-                                        {
-                                            bot.sidemove(Hero.left);
-                                        }
-                                        else bot.sidemove(Hero.right);
-
-                                    }
-                                }
-                            }
-                            else bot.sidemove(Hero.up);
+                            foodRow = r;
+                            foodCol = c;
+                            break;
                         }
                     }
+
+                    if (foodRow != -1 && foodCol != -1)
+                    {
+                        break;
+                    }
+                }
+                int currentDirection;
+                int fooddir = GetDirection(bot.headpos().Row, bot.headpos().Col, foodRow,foodCol);
+                // выбираем новое направление движения
+                    if (CanMoveInDirection(fooddir))
+                    {
+                        currentDirection = fooddir;
+                    }
+                    else
+                    {
+                        currentDirection = GetRandomDirection();
+                    }
+                    if((bot.headpos().Row+1 ==foodRow) || (bot.headpos().Row -1 == foodRow) || (bot.headpos().Col + 1 == foodCol) || (bot.headpos().Col -1 == foodCol))
+                    {
+                        currentDirection = GetDirection(bot.headpos().Row, bot.headpos().Col, foodRow, foodCol);
+            }
+                // выполняем шаг в выбранном направлении
+                switch (currentDirection)
+                {
+                    case 1://up
+                        bot.sidemove(Hero.up);
+                        break;
+                    case 2://down
+                        bot.sidemove(Hero.down);
+                        break;
+                    case 3://left
+                        bot.sidemove(Hero.left);
+                        break;
+                    case 4://right
+                        bot.sidemove(Hero.right);
+                        break;
+                default:
+                    return;
+                }
+
+                // ждем некоторое время перед следующим шагом
+        }
+            // функция для определения направления движения до указанной точки
+            public int GetDirection(int fromRow, int fromCol, int toRow, int toCol)
+            {
+            int dir;
+                if (fromRow > toRow)
+                {
+                    dir = 1;
+                }
+                else if (fromRow < toRow)
+                {
+                    dir = 2;
+                }
+                else if (fromCol > toCol)
+                {
+                    dir = 3;
+                }
+                else if (fromCol < toCol)
+                {
+                    dir = 4;
+                }
+                else
+                {
+                dir = 0;
+                }
+            return dir;
+            }
+        public bool CanMoveInDirection(int direction)
+        {
+            switch (direction)
+            {
+                case 1: //up
+                    return bot.headpos().Row > 0 && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == 0;
+                case 2://down
+                    return bot.headpos().Row < bot.Grid.GetLength(0) - 1 && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col] == 0;
+                case 3://left
+                    return bot.headpos().Col > 0 && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == 0;
+                case 4://right
+                    return bot.headpos().Col < bot.Grid.GetLength(1) - 1 && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == 0;
+                default:
+                    return false;
+            }
+        }
+        // функция для выбора случайного направления движения из текущей позиции головы змейки
+        public int GetRandomDirection()
+        {
+            int[] rnddir = new int[] { 0, 0, 0, 0 };
+            if (bot.headpos().Row > 0 && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == 0)
+            {
+                rnddir[0] = 1; //up
+            }
+
+            if (bot.headpos().Row < bot.Grid.GetLength(0) - 1 && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col] == 0)
+            {
+                rnddir[1] = 2;//down
+            }
+
+            if (bot.headpos().Col > 0 && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == 0)
+            {
+                rnddir[2] = 3;//left
+            }
+
+            if (bot.headpos().Col < bot.Grid.GetLength(1) - 1 && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == 0)
+            {
+                rnddir[3] = 4;//right
+            }
+            Random rnd = new Random();
+            int a;
+            while (true)
+            {
+                a = rnd.Next(3);
+                if(rnddir[a] != 0)
+                {
+                    return rnddir[a];
                 }
             }
         }
+
+        }
     }
-}

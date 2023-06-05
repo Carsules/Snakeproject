@@ -20,28 +20,6 @@ namespace Snakeproject
         {
             return new movement(-RowOffset, -ColOffset);
         }
-
-        public override bool Equals(object obj)
-        {
-            return obj is movement movement &&
-                   RowOffset == movement.RowOffset &&
-                   ColOffset == movement.ColOffset;
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(RowOffset, ColOffset);
-        }
-
-        public static bool operator ==(movement left, movement right)
-        {
-            return EqualityComparer<movement>.Default.Equals(left, right);
-        }
-
-        public static bool operator !=(movement left, movement right)
-        {
-            return !(left == right);
-        }
     }
 
 }
