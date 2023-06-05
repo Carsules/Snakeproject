@@ -96,7 +96,7 @@ namespace Snakeproject
         private async Task Loop()
         {
             int time = 150;
-            while (!state.Gameover)
+            while (!state.Gameover && !bot.Gameover)
             {
                 
                 if(state.Score * 2 - bot.Score * 2 < 145) {
@@ -279,22 +279,22 @@ namespace Snakeproject
         public int GetRandomDirection()
         {
             int[] rnddir = new int[] { 0, 0, 0, 0 };
-            if (bot.headpos().Row > 0 && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == 0)
+            if ((bot.headpos().Row > 0 && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == 0) || (bot.headpos().Row > 0 && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.food))
             {
                 rnddir[0] = 1; //up
             }
 
-            if (bot.headpos().Row < bot.Grid.GetLength(0) - 1 && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col] == 0)
+            if ((bot.headpos().Row < bot.Grid.GetLength(0) - 1 && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col] == 0) || (bot.headpos().Row < bot.Grid.GetLength(0) - 1 && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col] == items.food))
             {
                 rnddir[1] = 2;//down
             }
 
-            if (bot.headpos().Col > 0 && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == 0)
+            if ((bot.headpos().Col > 0 && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == 0) || (bot.headpos().Col > 0 && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.food))
             {
                 rnddir[2] = 3;//left
             }
 
-            if (bot.headpos().Col < bot.Grid.GetLength(1) - 1 && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == 0)
+            if ((bot.headpos().Col < bot.Grid.GetLength(1) - 1 && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == 0) || (bot.headpos().Col < bot.Grid.GetLength(1) - 1 && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.food))
             {
                 rnddir[3] = 4;//right
             }
@@ -302,7 +302,7 @@ namespace Snakeproject
             int a;
             while (true)
             {
-                a = rnd.Next(3);
+                a = rnd.Next(4);
                 if(rnddir[a] != 0)
                 {
                     return rnddir[a];
