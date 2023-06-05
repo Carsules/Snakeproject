@@ -20,18 +20,18 @@ namespace Snakeproject
        public int Cols { get; }
        
        public items[,] Grid { get; }
-        public Hero snk { get; set; }
+        public movement snk { get; set; }
         public int Score { get; set; }
         public bool Gameover { get; set; }
 
-        public LinkedList<Hero> dirchng = new LinkedList<Hero>();
+        public LinkedList<movement> dirchng = new LinkedList<movement>();
         private readonly LinkedList<Field> snkpos = new LinkedList<Field>();
         private readonly Random rnd = new Random();
         public engine(int rows, int cols) {
             Rows = rows;
             Cols = cols;
             Grid = new items[rows, cols];
-            snk = Hero.right;
+            snk = movement.right;
             create();
             dinner();
                 }
@@ -92,7 +92,7 @@ namespace Snakeproject
             snkpos.RemoveLast();
         }
 
-        public Hero getlastdir()
+        public movement getlastdir()
         {
             if (dirchng.Count == 0)
             {
@@ -101,17 +101,17 @@ namespace Snakeproject
             return dirchng.Last.Value;
         }
 
-        public bool CanChangeDirection(Hero newdir)
+        public bool CanChangeDirection(movement newdir)
         {
             if(dirchng.Count == 2)
             {
                 return false;
             }
 
-            Hero lastdir = getlastdir();
+            movement lastdir = getlastdir();
             return newdir != lastdir && newdir != lastdir.Opposite();
         }
-        public void sidemove(Hero dir)
+        public void sidemove(movement dir)
         {
             if (CanChangeDirection(dir))
             {

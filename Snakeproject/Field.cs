@@ -15,7 +15,7 @@ namespace Snakeproject
             Row = row;
             Col = col;
         }
-        public Field Trans(Hero snk)
+        public Field Trans(movement snk)
         {
             return new Field(Row + snk.RowOffset, Col + snk.ColOffset);
         }

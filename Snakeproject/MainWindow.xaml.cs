@@ -80,16 +80,16 @@ namespace Snakeproject
             switch (e.Key)
             {
                 case Key.A:
-                    state.sidemove(Hero.left);
+                    state.sidemove(movement.left);
                     break;
                 case Key.D:
-                    state.sidemove(Hero.right);
+                    state.sidemove(movement.right);
                     break;
                 case Key.W:
-                    state.sidemove(Hero.up);
+                    state.sidemove(movement.up);
                     break;
                 case Key.S:
-                    state.sidemove(Hero.down);
+                    state.sidemove(movement.down);
                     break;
             }
         }
@@ -216,16 +216,16 @@ namespace Snakeproject
                 switch (currentDirection)
                 {
                     case 1://up
-                        bot.sidemove(Hero.up);
+                        bot.sidemove(movement.up);
                         break;
                     case 2://down
-                        bot.sidemove(Hero.down);
+                        bot.sidemove(movement.down);
                         break;
                     case 3://left
-                        bot.sidemove(Hero.left);
+                        bot.sidemove(movement.left);
                         break;
                     case 4://right
-                        bot.sidemove(Hero.right);
+                        bot.sidemove(movement.right);
                         break;
                 default:
                     return;
