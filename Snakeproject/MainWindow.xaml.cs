@@ -281,32 +281,22 @@ namespace Snakeproject
             int[] rnddir = new int[] { 0, 0, 0, 0 };
             if ((bot.headpos().Row > 0 && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == 0) || (bot.headpos().Row > 0 && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.food))
             {
-                rnddir[0] = 1; //up
+                return 1; //up
             }
 
-            if ((bot.headpos().Row < bot.Grid.GetLength(0) - 1 && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col] == 0) || (bot.headpos().Row < bot.Grid.GetLength(0) - 1 && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col] == items.food))
+            else if ((bot.headpos().Row < bot.Grid.GetLength(0) - 1 && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col] == 0) || (bot.headpos().Row < bot.Grid.GetLength(0) - 1 && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col] == items.food))
             {
-                rnddir[1] = 2;//down
+                return 2;//down
             }
 
-            if ((bot.headpos().Col > 0 && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == 0) || (bot.headpos().Col > 0 && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.food))
+            else if ((bot.headpos().Col > 0 && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == 0) || (bot.headpos().Col > 0 && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.food))
             {
-                rnddir[2] = 3;//left
+                return 3;//left
             }
 
-            if ((bot.headpos().Col < bot.Grid.GetLength(1) - 1 && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == 0) || (bot.headpos().Col < bot.Grid.GetLength(1) - 1 && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.food))
+            else
             {
-                rnddir[3] = 4;//right
-            }
-            Random rnd = new Random();
-            int a;
-            while (true)
-            {
-                a = rnd.Next(4);
-                if(rnddir[a] != 0)
-                {
-                    return rnddir[a];
-                }
+                return 4;//right
             }
         }
 
