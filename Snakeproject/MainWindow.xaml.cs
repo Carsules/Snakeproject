@@ -73,22 +73,22 @@ namespace Snakeproject
             {
                 Restart();
             }
-            if (state.Gameover)
+            if (state.Gameover && bot.Gameover)
             {
                 return;
             }
             switch (e.Key)
             {
-                case Key.Left:
+                case Key.A:
                     state.sidemove(Hero.left);
                     break;
-                case Key.Right:
+                case Key.D:
                     state.sidemove(Hero.right);
                     break;
-                case Key.Up:
+                case Key.W:
                     state.sidemove(Hero.up);
                     break;
-                case Key.Down:
+                case Key.S:
                     state.sidemove(Hero.down);
                     break;
             }
