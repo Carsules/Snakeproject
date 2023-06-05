@@ -32,24 +32,32 @@ namespace Snakeproject
             Cols = cols;
             Grid = new items[rows, cols];
             snk = movement.right;
-            create();
+            create(Rows);
             dinner();
                 }
-        private void create()
+        private void create(int rows)
         {
-            int r = Rows / 2;
+            for(int r=0; r<rows; r++)
+            {
+                Grid[r, 0] = items.edge;
+                Grid[r, rows-1] = items.edge;
+                Grid[0, r] = items.edge;
+                Grid[rows-1, r] = items.edge;
+            }
+            int ro = Rows / 2;
             for(int i = 2; i < 5; i++)
             {
-                Grid[r, i] = items.snake;
-                snkpos.AddFirst(new Field(r, i));
+                Grid[ro, i] = items.snake;
+                snkpos.AddFirst(new Field(ro, i));
 
             }
+
         }
         private IEnumerable<Field> EmptyPositions()
         {
-            for(int r = 0; r< Rows; r++)
+            for(int r = 1; r< Rows-1; r++)
             {
-                for (int c=0; c < Cols; c++)
+                for (int c=1; c < Cols-1; c++)
                 {
                     if (Grid[r,c] == items.empty)
                     {

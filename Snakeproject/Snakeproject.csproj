@@ -9,12 +9,14 @@
 
   <ItemGroup>
     <None Remove="visual\body.png" />
+    <None Remove="visual\edge.png" />
     <None Remove="visual\empty.png" />
     <None Remove="visual\food.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="visual\body.png" />
+    <Resource Include="visual\edge.png" />
     <Resource Include="visual\empty.png" />
     <Resource Include="visual\food.png" />
   </ItemGroup>

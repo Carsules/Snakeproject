@@ -26,12 +26,12 @@ namespace Snakeproject
         {
             {items.empty, Graphics.empty },
             {items.snake, Graphics.body },
-            {items.food, Graphics.food }
-
+            {items.food, Graphics.food },
+            {items.edge, Graphics.edge }
         };
         public engine state;
         public engine bot;
-        private readonly int rows = 15, cols = 15;
+        private readonly int rows = 17, cols = 17;
         private readonly Image[,] gridimg;
         private readonly Image[,] botimg;
         public bool gamerun;

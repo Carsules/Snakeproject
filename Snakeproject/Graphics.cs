@@ -8,8 +8,8 @@ namespace Snakeproject
     {
         public static ImageSource empty = LoadImage("empty.png");
         public static ImageSource body = LoadImage("body.png");
-        public static ImageSource head = LoadImage("head.png");
         public static ImageSource food = LoadImage("food.png");
+        public static ImageSource edge = LoadImage("edge.png");
         public static ImageSource LoadImage(string fileName)
         {
             return new BitmapImage(new Uri($"visual/{fileName}", UriKind.Relative));
