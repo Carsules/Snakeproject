@@ -153,7 +153,7 @@ namespace Snakeproject
             }
             else if (crash == items.food)
             {
-                //addhead(headp);
+                addhead(headp);
                 Score++;
                 dinner();
             }
