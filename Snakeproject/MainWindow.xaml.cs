@@ -31,7 +31,7 @@ namespace Snakeproject
         };
         public engine state;
         public engine bot;
-        private readonly int rows = 25, cols = 25;
+        private readonly int rows = 15, cols = 15;
         private readonly Image[,] gridimg;
         private readonly Image[,] botimg;
         public bool gamerun;
@@ -212,10 +212,6 @@ namespace Snakeproject
                     {
                         currentDirection = GetRandomDirection();
                     }
-                    if((bot.headpos().Row+1 ==foodRow) || (bot.headpos().Row -1 == foodRow) || (bot.headpos().Col + 1 == foodCol) || (bot.headpos().Col -1 == foodCol))
-                    {
-                        currentDirection = GetDirection(bot.headpos().Row, bot.headpos().Col, foodRow, foodCol);
-            }
                 // выполняем шаг в выбранном направлении
                 switch (currentDirection)
                 {
@@ -268,13 +264,13 @@ namespace Snakeproject
             switch (direction)
             {
                 case 1: //up
-                    return bot.headpos().Row > 0 && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == 0;
+                    return ((bot.headpos().Row > 0 && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == 0) || (bot.headpos().Row > 0 && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.food));
                 case 2://down
-                    return bot.headpos().Row < bot.Grid.GetLength(0) - 1 && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col] == 0;
+                    return ((bot.headpos().Row < bot.Grid.GetLength(0) - 1 && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col] == 0) || (bot.headpos().Row < bot.Grid.GetLength(0) - 1 && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col] == items.food));
                 case 3://left
-                    return bot.headpos().Col > 0 && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == 0;
+                    return ((bot.headpos().Col > 0 && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == 0) || (bot.headpos().Col > 0 && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.food)); 
                 case 4://right
-                    return bot.headpos().Col < bot.Grid.GetLength(1) - 1 && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == 0;
+                    return ((bot.headpos().Col < bot.Grid.GetLength(1) - 1 && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == 0) || (bot.headpos().Col < bot.Grid.GetLength(1) - 1 && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.food));
                 default:
                     return false;
             }
