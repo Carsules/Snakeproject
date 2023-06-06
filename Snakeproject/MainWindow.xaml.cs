@@ -31,6 +31,7 @@ namespace Snakeproject
         };
         public engine state;
         public engine bot;
+        public int pastDirection = 4;
         private readonly int rows = 17, cols = 17;
         private readonly Image[,] gridimg;
         private readonly Image[,] botimg;
@@ -99,11 +100,11 @@ namespace Snakeproject
             while (!state.Gameover && !bot.Gameover)
             {
                 
-                if(state.Score * 2 - bot.Score * 2 < 145) {
+                if(state.Score * 2 + bot.Score * 2 < 145) {
                     await Task.Delay(time - state.Score * 2 - bot.Score*2);
                 }
                 else await Task.Delay(5);
-                state.move();
+                //state.move();
                 brain();
                 bot.move();
                 Draw();
@@ -212,8 +213,113 @@ namespace Snakeproject
                     {
                         currentDirection = GetRandomDirection();
                     }
-                // выполняем шаг в выбранном направлении
-                switch (currentDirection)
+                    if((bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] ==items.snake && bot.Grid[bot.headpos().Row +1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake)
+                        || (bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake)
+                        || (bot.Grid[bot.headpos().Row + 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake)
+                        || (bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake))
+                    {
+                        for(int c=bot.headpos().Col; c<cols-1; c++)
+                        {
+                            if (bot.Grid[bot.headpos().Row, c+1] != items.snake)
+                            {
+                                if(bot.Grid[bot.headpos().Row+1, c] == items.snake)
+                                {
+                                    if (CanMoveInDirection(1))
+                                        {
+                                            currentDirection = 1;
+                                        }
+                                }
+                                else if(bot.Grid[bot.headpos().Row - 1, c] == items.snake)
+                                {
+                                    if (CanMoveInDirection(2))
+                                    {
+                                        currentDirection = 2;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if ((bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake)
+                        || (bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake)
+                        || (bot.Grid[bot.headpos().Row + 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake)
+                        || (bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col + 1] == items.snake) && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake)
+                    {
+                        for (int c = bot.headpos().Col; c > 1; c--)
+                        {
+                            if (bot.Grid[bot.headpos().Row, c - 1] != items.snake)
+                            {
+                                if (bot.Grid[bot.headpos().Row + 1, c] == items.snake)
+                                {
+                                    if (CanMoveInDirection(1))
+                                    {
+                                        currentDirection = 1;
+                                    }
+                                }
+                                else if (bot.Grid[bot.headpos().Row - 1, c] == items.snake)
+                                {
+                                    if (CanMoveInDirection(2))
+                                    {
+                                        currentDirection = 2;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if((bot.Grid[bot.headpos().Row+1, bot.headpos().Col] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake)
+                        || (bot.Grid[bot.headpos().Row+1, bot.headpos().Col] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake)
+                        || (bot.Grid[bot.headpos().Row + 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake)
+                        || (bot.Grid[bot.headpos().Row+1, bot.headpos().Col] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake))
+                    {
+                        for (int r = bot.headpos().Row; r > 1; r--)
+                        {
+                            if (bot.Grid[r+1, bot.headpos().Col] != items.snake)
+                            {
+                                if (bot.Grid[r, bot.headpos().Col+1] == items.snake)
+                                {
+                                    if (CanMoveInDirection(3))
+                                    {
+                                        currentDirection = 3;
+                                    }
+                                }
+                                else if (bot.Grid[r, bot.headpos().Col -1] == items.snake)
+                                {
+                                    if (CanMoveInDirection(4))
+                                    {
+                                        currentDirection = 4;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if ((bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col] == items.snake)
+                        || (bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col] == items.snake)
+                        || (bot.Grid[bot.headpos().Row - 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col] == items.snake)
+                        || (bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col] == items.snake))
+                    {
+                        for (int r = bot.headpos().Row; r < rows-1; r++)
+                        {
+                            if (bot.Grid[r - 1, bot.headpos().Col] != items.snake)
+                            {
+                                if (bot.Grid[r, bot.headpos().Col + 1] == items.snake)
+                                {
+                                    if (CanMoveInDirection(3))
+                                    {
+                                        currentDirection = 3;
+                                    }
+                                }
+                                else if (bot.Grid[r, bot.headpos().Col - 1] == items.snake)
+                                {
+                                    if (CanMoveInDirection(4))
+                                    {
+                                        currentDirection = 4;
+                                    }
+                                }
+                            }
+                        }
+                    }
+            pastDirection = currentDirection;
+            // выполняем шаг в выбранном направлении
+            switch (currentDirection)
                 {
                     case 1://up
                         bot.sidemove(movement.up);
