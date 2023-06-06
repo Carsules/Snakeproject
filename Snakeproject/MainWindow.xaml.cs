@@ -104,7 +104,7 @@ namespace Snakeproject
                     await Task.Delay(time - state.Score * 2 - bot.Score*2);
                 }
                 else await Task.Delay(5);
-                //state.move();
+                state.move();
                 brain();
                 bot.move();
                 Draw();
