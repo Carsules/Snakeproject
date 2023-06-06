@@ -31,7 +31,6 @@ namespace Snakeproject
         };
         public engine state;
         public engine bot;
-        public int pastDirection = 4;
         private readonly int rows = 17, cols = 17;
         private readonly Image[,] gridimg;
         private readonly Image[,] botimg;
@@ -97,16 +96,22 @@ namespace Snakeproject
         private async Task Loop()
         {
             int time = 150;
-            while (!state.Gameover && !bot.Gameover)
+            while (!state.Gameover || !bot.Gameover)
             {
                 
                 if(state.Score * 2 + bot.Score * 2 < 145) {
                     await Task.Delay(time - state.Score * 2 - bot.Score*2);
                 }
                 else await Task.Delay(5);
-                state.move();
+                if (!state.Gameover) 
+                {
+                    state.move();
+                }
+                if (!bot.Gameover)
+                {
+                    bot.move();
+                }
                 brain();
-                bot.move();
                 Draw();
             }
         }
@@ -317,7 +322,6 @@ namespace Snakeproject
                             }
                         }
                     }
-            pastDirection = currentDirection;
             // выполняем шаг в выбранном направлении
             switch (currentDirection)
                 {
