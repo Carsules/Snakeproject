@@ -152,10 +152,6 @@ namespace Snakeproject
             {
                 return items.edge;
             }
-            if (headp == tailpos())
-            {
-                return items.empty;
-            }
             return Grid[headp.Row, headp.Col];
         }
         public void move()
