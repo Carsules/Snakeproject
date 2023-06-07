@@ -322,26 +322,6 @@ namespace Snakeproject
                             }
                         }
                     }
-                    if(currentDirection == 1)
-                    {
-                        if(bot.Grid[bot.headpos().Row, bot.headpos().Col+1] == items.snake)
-                        {   
-                            if(CanMoveInDirection(3))
-                            {
-                                currentDirection=3;
-                            }
-                        }
-                    }
-                    if(currentDirection == 3)
-                    {
-                        if(bot.Grid[bot.headpos().Row+1, bot.headpos().Col] == items.snake)
-                        {   
-                            if(CanMoveInDirection(1))
-                            {
-                                currentDirection=1;
-                            }
-                        }
-                    }
             // выполняем шаг в выбранном направлении
             switch (currentDirection)
                 {
