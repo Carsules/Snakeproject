@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Snakeproject"
         mc:Ignorable="d"
-        Title="Snakehaze" Height="700" Width="830"
+        Title="Snakehaze" Height="720" Width="1200"
         Background="{StaticResource backgroundColor}"
         Foreground="{StaticResource Textcolor}"
         FontFamily="{StaticResource MainFont}"
@@ -41,8 +41,8 @@
                 VerticalAlignment="Center"
                 RenderOptions.EdgeMode="Aliased">
             <UniformGrid x:Name="GameGrid"
-                         Width="400"
-                         Height="400"
+                         Width="500"
+                         Height="500"
                          Background="{StaticResource GridbackgroundColor}">
             </UniformGrid>
         </Border>
@@ -54,8 +54,8 @@
                 VerticalAlignment="Center"
                 RenderOptions.EdgeMode="Aliased">
             <UniformGrid x:Name="botGrid"
-                         Width="400"
-                         Height="400"
+                         Width="500"
+                         Height="500"
                          Background="{StaticResource GridbackgroundColor}">
             </UniformGrid>
         </Border>

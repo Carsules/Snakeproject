@@ -32,6 +32,7 @@ namespace Snakeproject
         public engine state; //Переменная игрового процесса игрока
         public engine bot; //Переменная игрового процесса бота
         private readonly int rows = 17, cols = 17; //Переменные размера поля
+        public int lastdir = 4;
         private readonly Image[,] gridimg; //переменная изображения объектов игрока
         private readonly Image[,] botimg; //переменная изображения объектов игрока
         public bool gamerun; //Переменная отвечающая за запуск игры
@@ -218,11 +219,11 @@ namespace Snakeproject
                     else
                     {
                         currentDirection = GetRandomDirection(); //Иначе текущее направление = другое доступное направление
-            }
-                    if((bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] ==items.snake && bot.Grid[bot.headpos().Row +1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake)
-                        || (bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake)
-                        || (bot.Grid[bot.headpos().Row + 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake)
-                        || (bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake)) //Если слева головы змейки возникает ее тело
+                    }
+                    if((lastdir == 3 && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] ==items.snake && bot.Grid[bot.headpos().Row +1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake)
+                        || (lastdir == 3 && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake)
+                        || (lastdir == 3 && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake)
+                        || (lastdir == 3 && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake)) //Если слева головы змейки возникает ее тело
                     {
                         for(int c=bot.headpos().Col; c<cols-1; c++) //Проходимся по столбцам от головы змейки до конца поля
                         {
@@ -231,98 +232,99 @@ namespace Snakeproject
                                 if(bot.Grid[bot.headpos().Row+1, c] == items.snake) //Если снизу клетки есть змейка
                                 {
                                     if (CanMoveInDirection(1)) //Если движение вверх допустимо
-                                        {
+                                    {
                                             currentDirection = 1; //Текущее направления равняется вверх
-                                        }
+                                    }
                                 }
                                 else if(bot.Grid[bot.headpos().Row - 1, c] == items.snake) //Иначе если сверху клетки есть змейка
                                 {
                                     if (CanMoveInDirection(2)) //Если движение вниз допустимо
                                     {
                                         currentDirection = 2; //Текущее направления равняется вниз
-                            }
+                                    }
                                 }
                             }
                         }
                     }
-                    else if ((bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake)
-                        || (bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake)
-                        || (bot.Grid[bot.headpos().Row + 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake)
-                        || (bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col + 1] == items.snake) && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake) //Если справо головы змейки возникает ее тело
-            {
-                        for (int c = bot.headpos().Col; c > 1; c--) //Проходимся по столбцам от головы змейки до начала поля
-                {
-                            if (bot.Grid[bot.headpos().Row, c - 1] != items.snake) //Если след клетка не равняется змейке
+                    else if ((lastdir == 4 && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake)
+                        || (lastdir == 4 && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake)
+                        || (lastdir == 4 && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake)
+                        || (lastdir == 4 && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col + 1] == items.snake) && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake) //Если справо головы змейки возникает ее тело
                     {
-                                if (bot.Grid[bot.headpos().Row + 1, c] == items.snake) //Если снизу клетки есть змейка
+                        for (int c = bot.headpos().Col; c > 1; c--) //Проходимся по столбцам от головы змейки до начала поля
                         {
-                                    if (CanMoveInDirection(1)) //Если движение вверх допустимо
+                            if (bot.Grid[bot.headpos().Row, c - 1] != items.snake) //Если след клетка не равняется змейке
                             {
+                                if (bot.Grid[bot.headpos().Row + 1, c] == items.snake) //Если снизу клетки есть змейка
+                                {
+                                    if (CanMoveInDirection(1)) //Если движение вверх допустимо
+                                    {
                                         currentDirection = 1; //Текущее направления равняется вверх
-                            }
+                                    }
                                 }
                                 else if (bot.Grid[bot.headpos().Row - 1, c] == items.snake) //Иначе если сверху клетки есть змейка
-                        {
+                                {
                                     if (CanMoveInDirection(2)) //Если движение вниз допустимо
-                            {
+                                    {
                                         currentDirection = 2; //Текущее направления равняется вниз
-                            }
+                                    }
                                 }
                             }
                         }
                     }
-                    else if((bot.Grid[bot.headpos().Row+1, bot.headpos().Col] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake)
-                        || (bot.Grid[bot.headpos().Row+1, bot.headpos().Col] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake)
-                        || (bot.Grid[bot.headpos().Row + 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake)
-                        || (bot.Grid[bot.headpos().Row+1, bot.headpos().Col] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake)) //Если снизу головы змейки возникает ее тело
-            {
-                        for (int r = bot.headpos().Row; r > 1; r--) //Проходимся по строкам от головы змейки до начала поля
-                {
-                            if (bot.Grid[r+1, bot.headpos().Col] != items.snake) //Если след клетка не равняется змейке
+                    else if((lastdir == 2 && bot.Grid[bot.headpos().Row+1, bot.headpos().Col] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake)
+                        || (lastdir == 2 && bot.Grid[bot.headpos().Row+1, bot.headpos().Col] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake)
+                        || (lastdir == 2 && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake)
+                        || (lastdir == 2 && bot.Grid[bot.headpos().Row+1, bot.headpos().Col] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake)) //Если снизу головы змейки возникает ее тело
                     {
-                                if (bot.Grid[r, bot.headpos().Col+1] == items.snake) //Если справа клетки есть змейка
+                        for (int r = bot.headpos().Row; r > 1; r--) //Проходимся по строкам от головы змейки до начала поля
                         {
-                                    if (CanMoveInDirection(3)) //Если движение влево допустимо
+                            if (bot.Grid[r+1, bot.headpos().Col] != items.snake) //Если след клетка не равняется змейке
                             {
+                                if (bot.Grid[r, bot.headpos().Col+1] == items.snake) //Если справа клетки есть змейка
+                                {
+                                    if (CanMoveInDirection(3)) //Если движение влево допустимо
+                                    {
                                         currentDirection = 3; //Текущее направления равняется влево
-                            }
+                                    }
                                 }
                                 else if (bot.Grid[r, bot.headpos().Col -1] == items.snake) //Иначе если слева клетки есть змейка
-                        {
+                                {
                                     if (CanMoveInDirection(4)) //Если движение вправо допустимо
-                            {
+                                    {
                                         currentDirection = 4; //Текущее направления равняется вправо
-                            }
+                                    }
                                 }
                             }
                         }
                     }
-                    else if ((bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col] == items.snake)
-                        || (bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col] == items.snake)
-                        || (bot.Grid[bot.headpos().Row - 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col] == items.snake)
-                        || (bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col] == items.snake)) //Если сверху головы змейки возникает ее тело
-            {
-                        for (int r = bot.headpos().Row; r < rows-1; r++) //Проходимся по строкам от головы змейки до конца поля
-                {
-                            if (bot.Grid[r - 1, bot.headpos().Col] != items.snake) //Если след клетка не равняется змейке
+                    else if ((lastdir == 1 && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col] == items.snake)
+                        || (lastdir == 1 && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col] == items.snake)
+                        || (lastdir == 1 && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col] == items.snake)
+                        || (lastdir == 1 && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col] == items.snake)) //Если сверху головы змейки возникает ее тело
                     {
-                                if (bot.Grid[r, bot.headpos().Col + 1] == items.snake) //Если справа клетки есть змейка
+                        for (int r = bot.headpos().Row; r < rows-1; r++) //Проходимся по строкам от головы змейки до конца поля
                         {
-                                    if (CanMoveInDirection(3)) //Если движение влево допустимо
+                            if (bot.Grid[r - 1, bot.headpos().Col] != items.snake) //Если след клетка не равняется змейке
                             {
+                                if (bot.Grid[r, bot.headpos().Col + 1] == items.snake) //Если справа клетки есть змейка
+                                {
+                                    if (CanMoveInDirection(3)) //Если движение влево допустимо
+                                    {
                                         currentDirection = 3; //Текущее направления равняется влево
-                            }
+                                    }
                                 }
                                 else if (bot.Grid[r, bot.headpos().Col - 1] == items.snake) //Иначе если слева клетки есть змейка
-                        {
+                                {
                                     if (CanMoveInDirection(4)) //Если движение вправо допустимо
-                            {
+                                    {
                                         currentDirection = 4; //Текущее направления равняется вправо
-                            }
+                                    }
                                 }
                             }
                         }
                     }
+                    lastdir = currentDirection;
             // выполняем шаг в выбранном направлении
             switch (currentDirection)
                 {
@@ -350,17 +352,17 @@ namespace Snakeproject
                     dir = 1; //Направление вверх
                 }
                 else if (fromRow < toRow) //Если стартовая строка меньше строки назначения 
-            {
+                {
                     dir = 2; //Направление вниз
-            }
+                }
                 else if (fromCol > toCol) //Если стартовый столбец больше столбец назначения 
-            {
+                {
                     dir = 3; //Направление влево
-            }
+                }
                 else if (fromCol < toCol) //Если стартовый столбец меньше столбец назначения 
-            {
+                {
                     dir = 4; //Направление вправо
-            }
+                }
                 else
                 {
                 dir = 0; //Иначе направление = нулю
