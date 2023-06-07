@@ -24,7 +24,7 @@
         <TextBlock x:Name="ScoreT"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Center"
-                   Text="Счёт 0"
+                   Text="Очки 0"
                    FontSize="30"
                    Margin="10"/>
         <TextBlock x:Name="ScoreB"
@@ -62,12 +62,12 @@
         <Border x:Name="Overlay"
                 Grid.Row="1"
                 Background="{StaticResource Overlaycolor}"
-                Width="{Binding Path=ActualWidth, ElementName=GridBorder}"
-                Height="{Binding Path=ActualHeight, ElementName=GridBorder}"
+                Width="1200"
+                Height="720"
                 Margin="{Binding Path=Margin, ElementName=GridBorder}"
                 RenderOptions.EdgeMode="Aliased">
             <TextBlock x:Name="OvTxt"
-                       Text="Нажмите любую кнопку, чтобы начать" FontSize="26"
+                       Text="Нажмите любую кнопку на клавиатуре, чтобы начать" FontSize="26"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        TextWrapping="Wrap"/>
