@@ -20,166 +20,167 @@ namespace Snakeproject
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window //Класс, который выводит змейку на экран 
     {
-        public Dictionary<items, ImageSource> gridtoimg = new()
+        public Dictionary<items, ImageSource> gridtoimg = new() //Словарь привязывающий игровой объект к изображению
         {
             {items.empty, Graphics.empty },
             {items.snake, Graphics.body },
             {items.food, Graphics.food },
             {items.edge, Graphics.edge }
         };
-        public engine state;
-        public engine bot;
-        private readonly int rows = 17, cols = 17;
-        private readonly Image[,] gridimg;
-        private readonly Image[,] botimg;
-        public bool gamerun;
-        public MainWindow()
+        public engine state; //Переменная игрового процесса игрока
+        public engine bot; //Переменная игрового процесса бота
+        private readonly int rows = 17, cols = 17; //Переменные размера поля
+        private readonly Image[,] gridimg; //переменная изображения объектов игрока
+        private readonly Image[,] botimg; //переменная изображения объектов игрока
+        public bool gamerun; //Переменная отвечающая за запуск игры
+        public MainWindow() //Конструктор запускающий программу
         {
-            InitializeComponent();
-            gridimg = SetupGrid();
-            botimg = SetupGridb();
-            state = new engine(rows, cols);
-            bot = new engine(rows, cols);
+            InitializeComponent(); //
+            gridimg = SetupGrid(); //Накладывает изображения на поле игрока
+            botimg = SetupGridb(); //Накладывает изображения на поле бота
+            state = new engine(rows, cols); //Создаёт поле игрока
+            bot = new engine(rows, cols); //Создаёт поле бота
         }
-        public void Restart()
+        public void Restart() //Метод перезапускающий игровой процесс
         {
-            state = new engine(rows, cols);
-            bot = new engine(rows, cols);
+            state = new engine(rows, cols); //Пересоздаёт поле игрока
+            bot = new engine(rows, cols); //Пересоздаёт поле бота
         }
-        public async Task RunGame()
+        public async Task RunGame() //Метод отвечающий за запуск игры
         {
             Draw();
-            Overlay.Visibility = Visibility.Hidden;
-            await Loop();
+            Overlay.Visibility = Visibility.Hidden; //Прячем стартовый слой
+            await Loop(); //Запуск игрового процесса
         }
-        public async void Window_PreviewKeyDown(Object sender, KeyEventArgs e)
+        public async void Window_PreviewKeyDown(Object sender, KeyEventArgs e) //Метод скрывающий стартовое окно при нажатии любой кнопки на клавиатуре
         {
-            if (Overlay.Visibility == Visibility.Visible)
+            if (Overlay.Visibility == Visibility.Visible) // Если стартовое окно видно, то программа приостановится
             {
-                e.Handled = true;
+                e.Handled = true; 
             }
-            if (!gamerun)
+            if (!gamerun) //Если игра не запущена 
             {
-                gamerun = true;
-                await RunGame();
-                gamerun = false;
+                gamerun = true; //Игра запускается 
+                await RunGame(); 
+                gamerun = false; //Игра останавливается
             }
         }
-        public void Window_KeyDown(Object sender, KeyEventArgs e)
+        public void Window_KeyDown(Object sender, KeyEventArgs e) //Метод привязывающий кнопки к игровому процессу
         {
-            if(e.Key == Key.R)
+            if(e.Key == Key.R) //Если нажата R, то игра рестартится
             {
                 Restart();
             }
-            if (state.Gameover && bot.Gameover)
+            if (state.Gameover && bot.Gameover) //При проигрыше нельзя нажимать кнопки
             {
                 return;
             }
             switch (e.Key)
             {
                 case Key.A:
-                    state.sidemove(movement.left);
+                    state.sidemove(movement.left); //При нажатии А змейка меняет направление влево
                     break;
                 case Key.D:
-                    state.sidemove(movement.right);
+                    state.sidemove(movement.right); //При нажатии D змейка меняет направление вправо
                     break;
                 case Key.W:
-                    state.sidemove(movement.up);
+                    state.sidemove(movement.up); //При нажатии W змейка меняет направление вверх
                     break;
                 case Key.S:
-                    state.sidemove(movement.down);
+                    state.sidemove(movement.down); //При нажатии S змейка меняет направление вниз
                     break;
             }
         }
-        private async Task Loop()
+        private async Task Loop() //Метод обновляющий поле, меняющий обновления кадров, определяющий смерть игроков и внедряющий алгаритм бота в игровой процесс
         {
-            int time = 150;
-            while (!state.Gameover || !bot.Gameover)
+            int time = 150; //Переменная отвечающая за задержку обновления кадров
+            while (!state.Gameover || !bot.Gameover) //Пока игрок и бот не умерли
             {
                 
-                if(state.Score * 2 + bot.Score * 2 < 145) {
-                    await Task.Delay(time - state.Score * 2 - bot.Score*2);
+                if(state.Score * 2 + bot.Score * 2 < 145) //Если количество очков игрока и бота умноженные на 2 меньше 145
+                { 
+                    await Task.Delay(time - state.Score * 2 - bot.Score*2); //То задержка равняется заданной задержке минус количество очков игрока и бота умноженные на 2
                 }
-                else await Task.Delay(5);
-                if (!state.Gameover) 
+                else await Task.Delay(5); //Иначе задержка равна 5
+                if (!state.Gameover) //Если игрок проигрывает, то игра останавливается
                 {
                     state.move();
                 }
-                if (!bot.Gameover)
+                if (!bot.Gameover) //Если бот проигрывает, то игра останавливается
                 {
                     bot.move();
                 }
-                brain();
-                Draw();
+                brain(); //Алгаритм змейки бота
+                Draw(); // Прорисовка полей
             }
         }
-        private Image[,] SetupGrid()
+        private Image[,] SetupGrid() //Метод прорисовывающий поле игрока
         {
-            Image[,] images = new Image[rows, cols];
-            GameGrid.Rows = rows;
-            GameGrid.Columns = cols;
-            for (int r = 0; r < rows; r++)
+            Image[,] images = new Image[rows, cols]; //Массив изображений поля
+            GameGrid.Rows = rows; //Задаём значение количества строк поле игрока
+            GameGrid.Columns = cols; //Задаём значение количества столбцов поле игрока
+            for (int r = 0; r < rows; r++) //Проходимся по полю и заполняем изображниями
             {
                 for(int c = 0; c < cols; c++)
                 {
-                    Image image = new Image
+                    Image image = new Image //Создаём переменную изображения
                     {
-                        Source = Graphics.empty
+                        Source = Graphics.empty //Задаём изначальным источником изоброжение пустой клетки
                     };
-                    images[r, c] = image;
-                    GameGrid.Children.Add(image);
+                    images[r, c] = image; //Переносим изображения в масссив
+                    GameGrid.Children.Add(image); //Добавляем изображения на поле
                 }
             }
-            return images;
+            return images; //Возвращаем массив изображений
         }
-        private Image[,] SetupGridb()
+        private Image[,] SetupGridb() //Метод прорисовывающий поле бота
         {
-            Image[,] images = new Image[rows, cols];
-            botGrid.Rows = rows;
-            botGrid.Columns = cols;
-            for (int r = 0; r < rows; r++)
+            Image[,] images = new Image[rows, cols]; //Массив изображений поля
+            botGrid.Rows = rows; //Задаём значение количества строк поле бота
+            botGrid.Columns = cols; //Задаём значение количества столбцов поле бота
+            for (int r = 0; r < rows; r++) //Проходимся по полю и заполняем изображниями
             {
                 for (int c = 0; c < cols; c++)
                 {
-                    Image image = new Image
+                    Image image = new Image //Создаём переменную изображения
                     {
-                        Source = Graphics.empty
+                        Source = Graphics.empty //Задаём изначальным источником изоброжение пустой клетки
                     };
-                    images[r, c] = image;
-                    botGrid.Children.Add(image);
+                    images[r, c] = image; //Переносим изображения в масссив
+                    botGrid.Children.Add(image); //Добавляем изображения на поле
                 }
             }
-            return images;
+            return images; //Возвращаем массив изображений
         }
-        public void Draw()
+        public void Draw() //Метод отвечающий за отображение поля и очков
         {
-            drwgrd();
-            drwgrdb();
-            ScoreT.Text = $"Очки {state.Score}";
-            ScoreB.Text = $"Очки {bot.Score}";
+            drwgrd(); 
+            drwgrdb(); 
+            ScoreT.Text = $"Очки {state.Score}"; //Отображает очки игрока
+            ScoreB.Text = $"Очки {bot.Score}"; //Отображает очки бота
         }
 
-        public void drwgrd()
+        public void drwgrd() //Метод прорисовывающий объект на поле игрока
         {
-            for(int r =0; r < rows; r++)
+            for(int r =0; r < rows; r++) //Проходимся по полю
             {
                 for (int c=0; c < cols; c++)
                 {
-                    items gridval = state.Grid[r, c];
-                    gridimg[r, c].Source = gridtoimg[gridval];
+                    items gridval = state.Grid[r, c]; //Считываем объект с поля
+                    gridimg[r, c].Source = gridtoimg[gridval]; //Вставляем изображение данного объекта
                 }
             }
         }
-        public void drwgrdb()
+        public void drwgrdb() //Метод прорисовывающий объект на поле бота
         {
-            for (int r = 0; r < rows; r++)
+            for (int r = 0; r < rows; r++) //Проходимся по полю
             {
                 for (int c = 0; c < cols; c++)
                 {
-                    items gridval = bot.Grid[r, c];
-                    botimg[r, c].Source = gridtoimg[gridval];
+                    items gridval = bot.Grid[r, c]; //Считываем объект с поля
+                    botimg[r, c].Source = gridtoimg[gridval]; //Вставляем изображение данного объекта
                 }
             }
         }
@@ -190,11 +191,11 @@ namespace Snakeproject
                 int foodRow = -1;
                 int foodCol = -1;
 
-                for (int r = 0; r < rows; r++)
+                for (int r = 0; r < rows; r++) //Проходимся по массиву
                 {
                     for (int c = 0; c < cols; c++)
                     {
-                        if (bot.Grid[r, c] == items.food)
+                        if (bot.Grid[r, c] == items.food) //Если в массиме находится еда, то записываем координаты
                         {
                             foodRow = r;
                             foodCol = c;
@@ -202,44 +203,44 @@ namespace Snakeproject
                         }
                     }
 
-                    if (foodRow != -1 && foodCol != -1)
+                    if (foodRow != -1 && foodCol != -1) //Если еды нет, то прерываем поиск
                     {
                         break;
                     }
                 }
-                int currentDirection;
-                int fooddir = GetDirection(bot.headpos().Row, bot.headpos().Col, foodRow,foodCol);
+                int currentDirection; //Переменная отвечающая за текущее направления движения
+                int fooddir = GetDirection(bot.headpos().Row, bot.headpos().Col, foodRow,foodCol); //Переменная отвечающая за направление движение с сторону еды
                 // выбираем новое направление движения
-                    if (CanMoveInDirection(fooddir))
+                    if (CanMoveInDirection(fooddir)) //Если направление в сторону еды возможно
                     {
-                        currentDirection = fooddir;
+                        currentDirection = fooddir; //Текущее направление = направление к еде
                     }
                     else
                     {
-                        currentDirection = GetRandomDirection();
-                    }
+                        currentDirection = GetRandomDirection(); //Иначе текущее направление = другое доступное направление
+            }
                     if((bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] ==items.snake && bot.Grid[bot.headpos().Row +1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake)
                         || (bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake)
                         || (bot.Grid[bot.headpos().Row + 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake)
-                        || (bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake))
+                        || (bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake)) //Если слева головы змейки возникает ее тело
                     {
-                        for(int c=bot.headpos().Col; c<cols-1; c++)
+                        for(int c=bot.headpos().Col; c<cols-1; c++) //Проходимся по столбцам от головы змейки до конца поля
                         {
-                            if (bot.Grid[bot.headpos().Row, c+1] != items.snake)
+                            if (bot.Grid[bot.headpos().Row, c+1] != items.snake) //Если след клетка не равняется змейке
                             {
-                                if(bot.Grid[bot.headpos().Row+1, c] == items.snake)
+                                if(bot.Grid[bot.headpos().Row+1, c] == items.snake) //Если снизу клетки есть змейка
                                 {
-                                    if (CanMoveInDirection(1))
+                                    if (CanMoveInDirection(1)) //Если движение вверх допустимо
                                         {
-                                            currentDirection = 1;
+                                            currentDirection = 1; //Текущее направления равняется вверх
                                         }
                                 }
-                                else if(bot.Grid[bot.headpos().Row - 1, c] == items.snake)
+                                else if(bot.Grid[bot.headpos().Row - 1, c] == items.snake) //Иначе если сверху клетки есть змейка
                                 {
-                                    if (CanMoveInDirection(2))
+                                    if (CanMoveInDirection(2)) //Если движение вниз допустимо
                                     {
-                                        currentDirection = 2;
-                                    }
+                                        currentDirection = 2; //Текущее направления равняется вниз
+                            }
                                 }
                             }
                         }
@@ -247,25 +248,25 @@ namespace Snakeproject
                     else if ((bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake)
                         || (bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake)
                         || (bot.Grid[bot.headpos().Row + 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake)
-                        || (bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col + 1] == items.snake) && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake)
+                        || (bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col + 1] == items.snake) && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake) //Если справо головы змейки возникает ее тело
+            {
+                        for (int c = bot.headpos().Col; c > 1; c--) //Проходимся по столбцам от головы змейки до начала поля
+                {
+                            if (bot.Grid[bot.headpos().Row, c - 1] != items.snake) //Если след клетка не равняется змейке
                     {
-                        for (int c = bot.headpos().Col; c > 1; c--)
+                                if (bot.Grid[bot.headpos().Row + 1, c] == items.snake) //Если снизу клетки есть змейка
                         {
-                            if (bot.Grid[bot.headpos().Row, c - 1] != items.snake)
+                                    if (CanMoveInDirection(1)) //Если движение вверх допустимо
                             {
-                                if (bot.Grid[bot.headpos().Row + 1, c] == items.snake)
-                                {
-                                    if (CanMoveInDirection(1))
-                                    {
-                                        currentDirection = 1;
-                                    }
+                                        currentDirection = 1; //Текущее направления равняется вверх
+                            }
                                 }
-                                else if (bot.Grid[bot.headpos().Row - 1, c] == items.snake)
-                                {
-                                    if (CanMoveInDirection(2))
-                                    {
-                                        currentDirection = 2;
-                                    }
+                                else if (bot.Grid[bot.headpos().Row - 1, c] == items.snake) //Иначе если сверху клетки есть змейка
+                        {
+                                    if (CanMoveInDirection(2)) //Если движение вниз допустимо
+                            {
+                                        currentDirection = 2; //Текущее направления равняется вниз
+                            }
                                 }
                             }
                         }
@@ -273,25 +274,25 @@ namespace Snakeproject
                     else if((bot.Grid[bot.headpos().Row+1, bot.headpos().Col] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake)
                         || (bot.Grid[bot.headpos().Row+1, bot.headpos().Col] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake)
                         || (bot.Grid[bot.headpos().Row + 1, bot.headpos().Col + 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake)
-                        || (bot.Grid[bot.headpos().Row+1, bot.headpos().Col] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake))
+                        || (bot.Grid[bot.headpos().Row+1, bot.headpos().Col] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.snake)) //Если снизу головы змейки возникает ее тело
+            {
+                        for (int r = bot.headpos().Row; r > 1; r--) //Проходимся по строкам от головы змейки до начала поля
+                {
+                            if (bot.Grid[r+1, bot.headpos().Col] != items.snake) //Если след клетка не равняется змейке
                     {
-                        for (int r = bot.headpos().Row; r > 1; r--)
+                                if (bot.Grid[r, bot.headpos().Col+1] == items.snake) //Если снизу клетки есть змейка
                         {
-                            if (bot.Grid[r+1, bot.headpos().Col] != items.snake)
+                                    if (CanMoveInDirection(3)) //Если движение вверх допустимо
                             {
-                                if (bot.Grid[r, bot.headpos().Col+1] == items.snake)
-                                {
-                                    if (CanMoveInDirection(3))
-                                    {
-                                        currentDirection = 3;
-                                    }
+                                        currentDirection = 3; //Текущее направления равняется вверх
+                            }
                                 }
-                                else if (bot.Grid[r, bot.headpos().Col -1] == items.snake)
-                                {
-                                    if (CanMoveInDirection(4))
-                                    {
-                                        currentDirection = 4;
-                                    }
+                                else if (bot.Grid[r, bot.headpos().Col -1] == items.snake) //Иначе если сверху клетки есть змейка
+                        {
+                                    if (CanMoveInDirection(4)) //Если движение вниз допустимо
+                            {
+                                        currentDirection = 4; //Текущее направления равняется вниз
+                            }
                                 }
                             }
                         }
