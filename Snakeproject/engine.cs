@@ -20,7 +20,7 @@ namespace Snakeproject
        public int Cols { get; }
        
        public items[,] Grid { get; }
-        public movement snk { get; set; }
+        public movement Snk { get; set; }
         public int Score { get; set; }
         public bool Gameover { get; set; }
 
@@ -31,10 +31,26 @@ namespace Snakeproject
             Rows = rows;
             Cols = cols;
             Grid = new items[rows, cols];
-            snk = movement.right;
+            Snk = movement.right;
             create(Rows);
             dinner();
                 }
+        public movement Opposite(movement type)
+        {
+            if (type == movement.up)
+            {
+                return movement.down;
+            }
+            else if (type == movement.down)
+            {
+                return movement.up;
+            }
+            else if (type == movement.left)
+            {
+                return movement.right;
+            }
+            else return movement.left;
+        }
         private void create(int rows)
         {
             for(int r=0; r<rows; r++)
@@ -104,7 +120,7 @@ namespace Snakeproject
         {
             if (dirchng.Count == 0)
             {
-                return snk;
+                return Snk;
             }
             return dirchng.Last.Value;
         }
@@ -117,7 +133,7 @@ namespace Snakeproject
             }
 
             movement lastdir = getlastdir();
-            return newdir != lastdir && newdir != lastdir.Opposite();
+            return newdir != lastdir && newdir != Opposite(lastdir);
         }
         public void sidemove(movement dir)
         {
@@ -146,10 +162,10 @@ namespace Snakeproject
         {
             if(dirchng.Count > 0)
             {
-                snk = dirchng.First.Value;
+                Snk = dirchng.First.Value;
                 dirchng.RemoveFirst();
             }
-            Field headp = headpos().Trans(snk);
+            Field headp = headpos().Trans(Snk);
             items crash = Strike(headp);
             if(crash == items.edge || crash == items.snake)
             {

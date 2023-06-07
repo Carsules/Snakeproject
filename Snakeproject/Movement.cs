@@ -16,10 +16,6 @@ namespace Snakeproject
             RowOffset = rowOffset;
             ColOffset = colOffset;
         }
-        public movement Opposite()
-        {
-            return new movement(-RowOffset, -ColOffset);
-        }
     }
 
 }
