@@ -31,7 +31,6 @@ namespace Snakeproject
         };
         public engine state;
         public engine bot;
-        public int lastdir = 4;
         private readonly int rows = 17, cols = 17;
         private readonly Image[,] gridimg;
         private readonly Image[,] botimg;
@@ -217,7 +216,7 @@ namespace Snakeproject
                     }
                     else
                     {
-                        currentDirection = GetnotfoodDirection();
+                        currentDirection = GetRandomDirection();
                     }
                     if((bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] ==items.snake && bot.Grid[bot.headpos().Row +1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake)
                         || (bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col - 1] == items.snake && bot.Grid[bot.headpos().Row, bot.headpos().Col + 1] == items.snake)
@@ -323,7 +322,6 @@ namespace Snakeproject
                             }
                         }
                     }
-            lastdir = currentDirection;
             // выполняем шаг в выбранном направлении
             switch (currentDirection)
                 {
@@ -349,39 +347,7 @@ namespace Snakeproject
             public int GetDirection(int fromRow, int fromCol, int toRow, int toCol)
             {
             int dir;
-                if(fromRow > toRow && fromCol > toCol)
-                {
-                    if (lastdir == 1)
-                    {
-                        dir = 3;
-                    }
-                    else dir = 1;
-                }
-                else if(fromRow < toRow && fromCol < toCol)
-                {
-                    if(lastdir == 2)
-                    {
-                        dir = 4;
-                    }
-                    else dir = 2;
-                }
-                else if(fromRow > toRow && fromCol < toCol)
-                {
-                    if(lastdir == 1)
-                    {
-                        dir = 4;
-                    }
-                     else dir = 1;
-                }
-                else if (fromRow < toRow && fromCol > toCol)
-                {
-                    if(lastdir == 2)
-                    {
-                        dir = 3;
-                    }
-                    else dir =2;
-                }
-                else if(fromRow > toRow)
+                if (fromRow > toRow)
                 {
                     dir = 1;
                 }
@@ -420,35 +386,27 @@ namespace Snakeproject
             }
         }
         // функция для выбора случайного направления движения из текущей позиции головы змейки
-        public int GetnotfoodDirection()
+        public int GetRandomDirection()
         {
-            List<int> posdir = new List<int>();
             if ((bot.headpos().Row > 0 && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == 0) || (bot.headpos().Row > 0 && bot.Grid[bot.headpos().Row - 1, bot.headpos().Col] == items.food))
             {
-                posdir.Add(1);
+                return 1; //up
             }
 
             else if ((bot.headpos().Row < bot.Grid.GetLength(0) - 1 && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col] == 0) || (bot.headpos().Row < bot.Grid.GetLength(0) - 1 && bot.Grid[bot.headpos().Row + 1, bot.headpos().Col] == items.food))
             {
-                posdir.Add(2);
+                return 2;//down
             }
 
             else if ((bot.headpos().Col > 0 && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == 0) || (bot.headpos().Col > 0 && bot.Grid[bot.headpos().Row, bot.headpos().Col - 1] == items.food))
             {
-                posdir.Add(3);
+                return 3;//left
             }
 
             else
             {
-                posdir.Add(4);
+                return 4;//right
             }
-            if (posdir.Count > 0)
-            {
-                Random rnd = new Random();
-                int index = rnd.Next(posdir.Count);
-                return posdir[index];
-            }
-            else return 4;
         }
 
         }
