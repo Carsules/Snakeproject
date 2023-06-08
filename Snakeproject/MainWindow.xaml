@@ -41,8 +41,8 @@
                 VerticalAlignment="Center"
                 RenderOptions.EdgeMode="Aliased">
             <UniformGrid x:Name="GameGrid"
-                         Width="500"
-                         Height="500"
+                         Width="550"
+                         Height="550"
                          Background="{StaticResource GridbackgroundColor}">
             </UniformGrid>
         </Border>
@@ -54,8 +54,8 @@
                 VerticalAlignment="Center"
                 RenderOptions.EdgeMode="Aliased">
             <UniformGrid x:Name="botGrid"
-                         Width="500"
-                         Height="500"
+                         Width="550"
+                         Height="550"
                          Background="{StaticResource GridbackgroundColor}">
             </UniformGrid>
         </Border>

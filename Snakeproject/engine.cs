@@ -141,13 +141,9 @@ namespace Snakeproject
                 dirchng.AddLast(dir); //Добавляем в лист новое направление змеки 
             }
         }
-        public bool edgerunner(Field pos) //Метод, проверяющий столкновение со стеной
-        {
-            return pos.Row < 0 || pos.Row >= Rows || pos.Col < 0 || pos.Col >= Cols;
-        }
         public items Strike(Field headp) //Метод определяющий столкновения
         {
-            if (edgerunner(headp)) //Если позиция головы находится на краю, то метод возвращает границу
+            if (headp.Row < 0 || headp.Row >= Rows || headp.Col < 0 || headp.Col >= Cols) //Если позиция головы находится на краю, то метод возвращает границу
             {
                 return items.edge;
             }

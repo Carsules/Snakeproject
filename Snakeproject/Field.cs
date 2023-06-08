@@ -10,7 +10,7 @@ namespace Snakeproject
     {
         public int Row { get; } //Переменная, обозначающая значение строки
         public int Col { get; } //Переменная, обозначающая значение столбца
-        public Field(int row, int col) //Метод, который берёт значение строки и столбца
+        public Field(int row, int col) //Конструктор, который берёт значение строки и столбца
         {
             Row = row;
             Col = col;

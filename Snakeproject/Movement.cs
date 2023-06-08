@@ -11,7 +11,7 @@ namespace Snakeproject
         public readonly static movement down = new movement(1, 0); //Переменная, задающее направление вниз
         public int RowOffset { get; } //Переменная, обозначающая значение строки
         public int ColOffset { get; } //Переменная, обозначающая значение столбца
-        private movement(int rowOffset, int colOffset) //Метод, который берёт значение строки и столбца
+        private movement(int rowOffset, int colOffset) //Конструктор, который берёт значение строки и столбца
         {
             RowOffset = rowOffset;
             ColOffset = colOffset;
